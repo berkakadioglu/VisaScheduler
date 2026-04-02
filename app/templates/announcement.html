@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-3 text-center">
+    <div class="row">
+        <div class="col-md-2">
+            <a href="/" class="btn btn-light">Back</a>
+        </div>
+        <div class="col-md-10">
+            {% if error_message %}
+            <div class="card text-center">
+                <a class="btn btn-danger">{{error_message}}</a>
+            </div>
+            {% else %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">
+                        Opens At: {{reservation_open_at}} <br>
+                        Appointment Date: {{appointment_date}} <br>
+                    </p>
+                    <a class="btn btn-warning">Queue opens at: {{queue_open_at}}</a> <br>
+                    <a class="btn btn-warning mt-3">Queue closes at: {{reservation_open_at}}</a> <br>
+                    {% if status == "open" %}
+                    <a class="btn btn-warning mt-3">Status: Queue is not open yet</a> <br>
+                    {% elif status == "live"%}
+                    <a class="btn btn-success mt-3">Status: Queue is live</a> <br>
+                    {% else %}
+                    <a class="btn btn-danger mt-3">Status: Queue is closed</a> <br>
+                    {% endif %}
+                    <a class="btn btn-secondary mt-3">Slots: {{slots}}</a> <br>
+                    {% if joined == False and status == 'live'%}
+                    <form action="/announcement/{{ id }}/join" method="post">
+                        <button class="btn btn-primary mt-4">Join Queue</button>
+                    </form>
+                    {% elif joined == False and (status == 'closed' or status == 'open')%}
+                    <form action="/announcement/{{ id }}/join" method="post" disabled>
+                        <button class="btn btn-primary mt-4" disabled>Join Queue</button>
+                    </form>
+                    {% else %}
+                    <a class="btn btn-success mt-4">You have successfully entered the queue. Your queue number is: {{queue_number}}</a> <br>
+                    <a class="btn btn-success mt-2">Estimated Waiting Time: {{estimated_waiting_time}} minutes.</a>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
